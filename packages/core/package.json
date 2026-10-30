@@ -1,0 +1,32 @@
+{
+  "name": "@lightbeam/core",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Framework-agnostic engine: QR symbol generation, LT fountain codes, frame protocol, integrity and optional encryption.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@noble/ciphers": "^1.2.0",
+    "@noble/hashes": "^1.7.0",
+    "pako": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/pako": "^2.0.3",
+    "jsqr": "^1.4.0",
+    "qrcode": "^1.5.4",
+    "vitest": "^2.1.8"
+  }
+}

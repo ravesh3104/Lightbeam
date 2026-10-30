@@ -1,0 +1,31 @@
+# Caddyfile - automatic TLS termination for LightBeam Web.
+#
+# Replace lightbeam.example.com with your domain (or lightbeam.local with `tls internal`
+# on a local LAN) so browsers grant `getUserMedia` camera access in a secure context.
+
+lightbeam.example.com {
+	encode zstd gzip
+
+	reverse_proxy lightbeam:8787
+
+	@immutable path /assets/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	@shell path / /send /receive /files /settings /about /s /r /sw.js
+	header @shell Cache-Control "no-cache"
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		-Server
+	}
+
+	log {
+		output file /data/access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+		format json
+	}
+}

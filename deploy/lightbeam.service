@@ -1,0 +1,51 @@
+# systemd unit for bare-metal deployment of LightBeam Web.
+#
+#   npm ci && npm run build
+#   sudo useradd --system --home /var/lib/lightbeam --shell /usr/sbin/nologin lightbeam
+#   sudo mkdir -p /var/lib/lightbeam /opt/lightbeam
+#   sudo cp apps/server/dist/server.js /opt/lightbeam/
+#   sudo cp -r apps/server/public /opt/lightbeam/
+#   sudo cp deploy/lightbeam.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now lightbeam
+
+[Unit]
+Description=LightBeam Web (optical file transfer PWA and session registry)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=lightbeam
+Group=lightbeam
+WorkingDirectory=/opt/lightbeam
+
+Environment=NODE_ENV=production
+Environment=PORT=8787
+Environment=HOST=127.0.0.1
+Environment=SESSION_FILE=/var/lib/lightbeam/sessions.json
+
+ExecStart=/usr/bin/node /opt/lightbeam/server.js
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=false
+RestrictRealtime=true
+SystemCallArchitectures=native
+ReadWritePaths=/var/lib/lightbeam
+
+MemoryMax=256M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,46 @@
+# LightBeam Web, self-hosted.
+#
+#   docker compose -f deploy/docker-compose.yml up -d --build
+#
+# Two services:
+#   lightbeam  Unified Node HTTP server + Vite-built React PWA
+#   caddy      Automatic HTTPS reverse proxy (required by browsers for camera access on non-localhost origins)
+
+services:
+  lightbeam:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: lightbeam-web:1.0.0
+    restart: unless-stopped
+    environment:
+      PORT: 8787
+      HOST: 0.0.0.0
+      SESSION_FILE: /data/sessions.json
+    volumes:
+      - lightbeam-data:/data
+    expose:
+      - '8787'
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - lightbeam
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  lightbeam-data:
+  caddy-data:
+  caddy-config:

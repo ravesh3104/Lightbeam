@@ -1,0 +1,25 @@
+{
+  "name": "@lightbeam/server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Unified LightBeam Node web server: serves the React PWA with SPA routing, short-URL redirects, session registry API, and anonymous transfer telemetry.",
+  "main": "./dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "node scripts/build.mjs",
+    "prestart": "node scripts/build.mjs",
+    "start": "node dist/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@lightbeam/core": "*",
+    "jsqr": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "esbuild": "^0.25.0",
+    "vitest": "^2.1.8"
+  }
+}

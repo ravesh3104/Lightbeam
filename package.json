@@ -1,0 +1,43 @@
+{
+  "name": "lightbeam",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LightBeam - optical file transfer over screen and camera (fountain-coded animated QR). Core engine, React + Vite PWA, and unified Node web server.",
+  "license": "MIT",
+  "workspaces": [
+    "packages/core",
+    "apps/web",
+    "apps/server"
+  ],
+  "scripts": {
+    "build": "npm run build:core && npm run build:web && npm run build:server",
+    "build:core": "npm run build --workspace @lightbeam/core",
+    "build:web": "npm run build --workspace @lightbeam/web",
+    "build:server": "npm run build --workspace @lightbeam/server",
+    "dev": "npm run dev --workspace @lightbeam/web",
+    "dev:web": "npm run dev --workspace @lightbeam/web",
+    "dev:server": "npm run dev --workspace @lightbeam/server",
+    "start": "npm run start --workspace @lightbeam/server",
+    "start:server": "npm run start --workspace @lightbeam/server",
+    "test": "npm run build:web && npm run test:core && npm run test:web && npm run test:server && npm run test:docs",
+    "test:core": "npm run test --workspace @lightbeam/core",
+    "test:web": "npm run test --workspace @lightbeam/web",
+    "test:server": "npm run test --workspace @lightbeam/server",
+    "test:docs": "node tools/make-code-reference.mjs",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "gen:qrtables": "node tools/gen-qr-tables.mjs",
+    "gen:icons": "node tools/make-icons.mjs",
+    "diag:degree": "tsx tools/diag/degree-experiment.ts",
+    "diag:prefix": "tsx tools/diag/prefix-experiment.ts",
+    "diag:core": "tsx apps/server/test/core-link-check.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20.10"
+  }
+}
